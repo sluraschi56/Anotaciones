@@ -1,0 +1,19 @@
+ip link show | grep vf |more
+
+chequeo de huge page
+
+cat /proc/cmdline
+free -g
+
+virsh list --all
+sudo virsh dumpxml <ID> | grep "nova:name"
+sudo virsh dumpxml <ID> | grep -E "nova:name|cpu"
+
+sudo virsh dumpxml 1 | grep "nova:name"
+sudo virsh dumpxml 1 | grep -E "nova:name|cpu"
+sudo virsh dumpxml 2 | grep "nova:name"
+sudo virsh dumpxml 2 | grep -E "nova:name|cpu"
+sudo virsh dumpxml 3 | grep "nova:name"
+sudo virsh dumpxml 3 | grep -E "nova:name|cpu"
+sudo virsh dumpxml 4 | grep "nova:name"
+sudo virsh dumpxml 4 | grep -E "nova:name|cpu"

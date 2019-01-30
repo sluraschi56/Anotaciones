@@ -1,0 +1,357 @@
+--------------------------------------------------------------------------------
+Determinar cuantas cpu hay presentes en el sistema con el comando top presionando "1"
+--------------------------------------------------------------------------------
+
+[root@labans ~]# top
+top - 19:57:06 up 62 days,  8:38,  2 users,  load average: 0,00, 0,01, 0,05
+Tasks: 231 total,   1 running, 230 sleeping,   0 stopped,   0 zombie
+%Cpu0  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu1  :  0,3 us,  0,3 sy,  0,0 ni, 99,3 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu2  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu3  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu4  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu5  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu6  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+%Cpu7  :  0,0 us,  0,0 sy,  0,0 ni,100,0 id,  0,0 wa,  0,0 hi,  0,0 si,  0,0 st
+
+--------------------------------------------------------------------------------
+Otras maneras
+--------------------------------------------------------------------------------
+
+[root@labans ~]# grep -c ^processor /proc/cpuinfo
+8
+[root@labans ~]# lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                8
+On-line CPU(s) list:   0-7
+Thread(s) per core:    1
+Core(s) per socket:    1
+Socket(s):             8
+NUMA node(s):          1
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2699 v3 @ 2.30GHz
+Stepping:              2
+CPU MHz:               2294.686
+BogoMIPS:              4589.37
+Virtualization:        VT-x
+Hypervisor vendor:     VMware
+Virtualization type:   full
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              46080K
+NUMA node0 CPU(s):     0-7
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts nopl xtopology tsc_reliable nonstop_tsc aperfmperf eagerfpu pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm epb tpr_shadow vnmi ept vpid fsgsbase smep xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts
+[root@labans ~]#
+
+--------------------------------------------------------------------------------
+Tomar nota de la interface de red y del hostname
+--------------------------------------------------------------------------------
+
+[root@labans ~]# hostname
+labans
+[root@labans ~]# ip addr show ens192
+3: ens224: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:50:56:b8:45:c4 brd ff:ff:ff:ff:ff:ff
+    inet 10.92.105.90/24 brd 10.92.105.255 scope global noprefixroute ens224
+       valid_lft forever preferred_lft forever
+    inet6 fe80::250:56ff:feb8:45c4/64 scope link
+       valid_lft forever preferred_lft forever
+[root@labans ~]#
+
+--------------------------------------------------------------------------------
+tomar nota de los servicios activos
+--------------------------------------------------------------------------------
+
+[root@labans ~]# systemctl list-units -t service | awk '$3=="active"'
+abrt-ccpp.service                  loaded active exited  Install ABRT coredump hook
+abrt-oops.service                  loaded active running ABRT kernel log watcher
+abrtd.service                      loaded active running ABRT Automated Bug Reporting Tool
+atd.service                        loaded active running Job spooling tools
+auditd.service                     loaded active running Security Auditing Service
+chronyd.service                    loaded active running NTP client/server
+crond.service                      loaded active running Command Scheduler
+dbus.service                       loaded active running D-Bus System Message Bus
+firewalld.service                  loaded active running firewalld - dynamic firewall daemon
+getty@tty1.service                 loaded active running Getty on tty1
+gssproxy.service                   loaded active running GSSAPI Proxy Daemon
+irqbalance.service                 loaded active running irqbalance daemon
+iscsi-shutdown.service             loaded active exited  Logout off all iSCSI sessions on shutdown
+kdump.service                      loaded active exited  Crash recovery kernel arming
+kmod-static-nodes.service          loaded active exited  Create list of required static device nodes for the current kernel
+libstoragemgmt.service             loaded active running libstoragemgmt plug-in server daemon
+libvirtd.service                   loaded active running Virtualization daemon
+lvm2-lvmetad.service               loaded active running LVM2 metadata daemon
+lvm2-monitor.service               loaded active exited  Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling
+lvm2-pvscan@8:2.service            loaded active exited  LVM2 PV scan on device 8:2
+netcf-transaction.service          loaded active exited  Rollback uncommitted netcf network config change transactions
+network.service                    loaded active exited  LSB: Bring up/down networking
+NetworkManager-wait-online.service loaded active exited  Network Manager Wait Online
+NetworkManager.service             loaded active running Network Manager
+polkit.service                     loaded active running Authorization Manager
+postfix.service                    loaded active running Postfix Mail Transport Agent
+rhel-dmesg.service                 loaded active exited  Dump dmesg to /var/log/dmesg
+rhel-domainname.service            loaded active exited  Read and set NIS domainname from /etc/sysconfig/network
+rhel-import-state.service          loaded active exited  Import network configuration from initramfs
+rhel-readonly.service              loaded active exited  Configure read-only root support
+rngd.service                       loaded active running Hardware RNG Entropy Gatherer Daemon
+rpcbind.service                    loaded active running RPC bind service
+rsyslog.service                    loaded active running System Logging Service
+smartd.service                     loaded active running Self Monitoring and Reporting Technology (SMART) Daemon
+sshd.service                       loaded active running OpenSSH server daemon
+sysstat.service                    loaded active exited  Resets System Activity Logs
+systemd-journal-flush.service      loaded active exited  Flush Journal to Persistent Storage
+systemd-journald.service           loaded active running Journal Service
+systemd-logind.service             loaded active running Login Service
+systemd-random-seed.service        loaded active exited  Load/Save Random Seed
+systemd-remount-fs.service         loaded active exited  Remount Root and Kernel File Systems
+systemd-sysctl.service             loaded active exited  Apply Kernel Variables
+systemd-tmpfiles-setup-dev.service loaded active exited  Create Static Device Nodes in /dev
+systemd-tmpfiles-setup.service     loaded active exited  Create Volatile Files and Directories
+systemd-udev-settle.service        loaded active exited  udev Wait for Complete Device Initialization
+systemd-udev-trigger.service       loaded active exited  udev Coldplug all Devices
+systemd-udevd.service              loaded active running udev Kernel Device Manager
+systemd-update-utmp.service        loaded active exited  Update UTMP about System Boot/Shutdown
+systemd-user-sessions.service      loaded active exited  Permit User Sessions
+systemd-vconsole-setup.service     loaded active exited  Setup Virtual Console
+tuned.service                      loaded active running Dynamic System Tuning Daemon
+vdo.service                        loaded active exited  VDO volume services
+xinetd.service                     loaded active running Xinetd A Powerful Replacement For Inetd
+[root@labans ~]#
+
+
+--------------------------------------------------------------------------------
+terminar con los servicios libvirtd, smartd y NetworkManager
+--------------------------------------------------------------------------------
+
+[root@labans ~]# ps aux | head -n1 ; ps aux | grep -e '[l]ibvirtd' -e '[s]martd' -e '[N]etworkManager'
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root       860  0.0  0.0  24492  2256 ?        Ss   oct10   0:00 /usr/sbin/smartd -n -q never
+root       906  0.0  0.0 478700  9372 ?        Ssl  oct10   1:51 /usr/sbin/NetworkManager --no-daemon
+root      1294  0.0  0.1 687092 17196 ?        Ssl  oct10   0:00 /usr/sbin/libvirtd
+[root@labans ~]# systemctl status libvirtd smartd NetworkManager
+● libvirtd.service - Virtualization daemon
+   Loaded: loaded (/usr/lib/systemd/system/libvirtd.service; enabled; vendor preset: enabled)
+   Active: active (running) since mié 2018-10-10 11:18:24 -03; 2 months 1 days ago
+     Docs: man:libvirtd(8)
+           https://libvirt.org
+ Main PID: 1294 (libvirtd)
+   CGroup: /system.slice/libvirtd.service
+           ├─1294 /usr/sbin/libvirtd
+           ├─1713 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_leaseshelper
+           └─1714 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_leaseshelper
+
+oct 10 11:18:24 labans systemd[1]: Started Virtualization daemon.
+oct 10 11:18:25 labans dnsmasq[1713]: started, version 2.76 cachesize 150
+oct 10 11:18:25 labans dnsmasq[1713]: compile time options: IPv6 GNU-getopt DBus no-i18n IDN DHCP DHCPv6 no-Lua TFTP no-conntrack ipset auth no-DNSSEC loop-detect inotify
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: DHCP, IP range 192.168.122.2 -- 192.168.122.254, lease time 1h
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: DHCP, sockets bound exclusively to interface virbr0
+oct 10 11:18:25 labans dnsmasq[1713]: reading /etc/resolv.conf
+oct 10 11:18:25 labans dnsmasq[1713]: using nameserver 8.8.8.8#53
+oct 10 11:18:25 labans dnsmasq[1713]: read /etc/hosts - 2 addresses
+oct 10 11:18:25 labans dnsmasq[1713]: read /var/lib/libvirt/dnsmasq/default.addnhosts - 0 addresses
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: read /var/lib/libvirt/dnsmasq/default.hostsfile
+
+● smartd.service - Self Monitoring and Reporting Technology (SMART) Daemon
+   Loaded: loaded (/usr/lib/systemd/system/smartd.service; enabled; vendor preset: enabled)
+   Active: active (running) since mié 2018-10-10 11:18:20 -03; 2 months 1 days ago
+     Docs: man:smartd(8)
+           man:smartd.conf(5)
+ Main PID: 860 (smartd)
+   CGroup: /system.slice/smartd.service
+           └─860 /usr/sbin/smartd -n -q never
+
+oct 10 11:18:20 labans systemd[1]: Starting Self Monitoring and Reporting Technology (SMART) Daemon...
+oct 10 11:18:20 labans smartd[860]: smartd 6.5 2016-05-07 r4318 [x86_64-linux-3.10.0-862.14.4.el7.x86_64] (local build)
+oct 10 11:18:20 labans smartd[860]: Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
+oct 10 11:18:20 labans smartd[860]: Opened configuration file /etc/smartmontools/smartd.conf
+oct 10 11:18:20 labans smartd[860]: Configuration file /etc/smartmontools/smartd.conf was parsed, found DEVICESCAN, scanning devices
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, opened
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, [VMware   Virtual disk     1.0 ], 536 GB
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, IE (SMART) not enabled, skip device
+oct 10 11:18:20 labans smartd[860]: Try 'smartctl -s on /dev/sda' to turn on SMART features
+oct 10 11:18:20 labans smartd[860]: Monitoring 0 ATA/SATA, 0 SCSI/SAS and 0 NVMe devices
+
+● NetworkManager.service - Network Manager
+   Loaded: loaded (/usr/lib/systemd/system/NetworkManager.service; enabled; vendor preset: enabled)
+   Active: active (running) since mié 2018-10-10 11:18:21 -03; 2 months 1 days ago
+     Docs: man:NetworkManager(8)
+ Main PID: 906 (NetworkManager)
+   CGroup: /system.slice/NetworkManager.service
+           └─906 /usr/sbin/NetworkManager --no-daemon
+
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0007] device (virbr0-nic): state change: ip-config -> ip-check (reason 'none', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0009] device (virbr0): state change: secondaries -> activated (reason 'none', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0041] device (virbr0): Activation: successful, device activated.
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0049] device (virbr0-nic): state change: ip-check -> secondaries (reason 'none', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0051] device (virbr0-nic): state change: secondaries -> activated (reason 'none', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0062] device (virbr0-nic): Activation: successful, device activated.
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0389] device (virbr0-nic): state change: activated -> unmanaged (reason 'connection-assumed', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0392] device (virbr0): bridge port virbr0-nic was detached
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0392] device (virbr0-nic): released from master device virbr0
+nov 27 01:35:10 labans NetworkManager[906]: <info>  [1543293310.3492] device (ens192): carrier: link connected
+[root@labans ~]#
+
+
+[root@labans ~]# systemctl stop libvirtd smartd NetworkManager
+[root@labans ~]#
+[root@labans ~]# systemctl status libvirtd smartd NetworkManager
+● libvirtd.service - Virtualization daemon
+   Loaded: loaded (/usr/lib/systemd/system/libvirtd.service; enabled; vendor preset: enabled)
+   Active: inactive (dead) since mar 2018-12-11 20:10:31 -03; 23s ago
+     Docs: man:libvirtd(8)
+           https://libvirt.org
+  Process: 1294 ExecStart=/usr/sbin/libvirtd $LIBVIRTD_ARGS (code=exited, status=0/SUCCESS)
+ Main PID: 1294 (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/libvirtd.service
+           ├─1713 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_leaseshelper
+           └─1714 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_leaseshelper
+
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: DHCP, sockets bound exclusively to interface virbr0
+oct 10 11:18:25 labans dnsmasq[1713]: reading /etc/resolv.conf
+oct 10 11:18:25 labans dnsmasq[1713]: using nameserver 8.8.8.8#53
+oct 10 11:18:25 labans dnsmasq[1713]: read /etc/hosts - 2 addresses
+oct 10 11:18:25 labans dnsmasq[1713]: read /var/lib/libvirt/dnsmasq/default.addnhosts - 0 addresses
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: read /var/lib/libvirt/dnsmasq/default.hostsfile
+dic 11 20:10:31 labans systemd[1]: Stopping Virtualization daemon...
+dic 11 20:10:31 labans systemd[1]: Stopped Virtualization daemon.
+dic 11 20:10:31 labans dnsmasq[1713]: reading /etc/resolv.conf
+dic 11 20:10:31 labans dnsmasq[1713]: using nameserver 8.8.8.8#53
+
+● smartd.service - Self Monitoring and Reporting Technology (SMART) Daemon
+   Loaded: loaded (/usr/lib/systemd/system/smartd.service; enabled; vendor preset: enabled)
+   Active: inactive (dead) since mar 2018-12-11 20:10:31 -03; 23s ago
+     Docs: man:smartd(8)
+           man:smartd.conf(5)
+  Process: 860 ExecStart=/usr/sbin/smartd -n $smartd_opts (code=exited, status=0/SUCCESS)
+ Main PID: 860 (code=exited, status=0/SUCCESS)
+
+oct 10 11:18:20 labans smartd[860]: Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
+oct 10 11:18:20 labans smartd[860]: Opened configuration file /etc/smartmontools/smartd.conf
+oct 10 11:18:20 labans smartd[860]: Configuration file /etc/smartmontools/smartd.conf was parsed, found DEVICESCAN, scanning devices
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, opened
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, [VMware   Virtual disk     1.0 ], 536 GB
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, IE (SMART) not enabled, skip device
+oct 10 11:18:20 labans smartd[860]: Try 'smartctl -s on /dev/sda' to turn on SMART features
+oct 10 11:18:20 labans smartd[860]: Monitoring 0 ATA/SATA, 0 SCSI/SAS and 0 NVMe devices
+dic 11 20:10:31 labans systemd[1]: Stopping Self Monitoring and Reporting Technology (SMART) Daemon...
+dic 11 20:10:31 labans systemd[1]: Stopped Self Monitoring and Reporting Technology (SMART) Daemon.
+
+● NetworkManager.service - Network Manager
+   Loaded: loaded (/usr/lib/systemd/system/NetworkManager.service; enabled; vendor preset: enabled)
+   Active: inactive (dead) since mar 2018-12-11 20:10:31 -03; 23s ago
+     Docs: man:NetworkManager(8)
+  Process: 906 ExecStart=/usr/sbin/NetworkManager --no-daemon (code=exited, status=0/SUCCESS)
+ Main PID: 906 (code=exited, status=0/SUCCESS)
+
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0062] device (virbr0-nic): Activation: successful, device activated.
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0389] device (virbr0-nic): state change: activated -> unmanaged (reason 'connection-assumed', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0392] device (virbr0): bridge port virbr0-nic was detached
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0392] device (virbr0-nic): released from master device virbr0
+nov 27 01:35:10 labans NetworkManager[906]: <info>  [1543293310.3492] device (ens192): carrier: link connected
+dic 11 20:10:31 labans systemd[1]: Stopping Network Manager...
+dic 11 20:10:31 labans NetworkManager[906]: <info>  [1544569831.1395] caught SIGTERM, shutting down normally.
+dic 11 20:10:31 labans NetworkManager[906]: <info>  [1544569831.1435] device (virbr0-nic): released from master device virbr0
+dic 11 20:10:31 labans NetworkManager[906]: <info>  [1544569831.1475] exiting (success)
+dic 11 20:10:31 labans systemd[1]: Stopped Network Manager.
+[root@labans ~]#
+[root@labans ~]# systemctl disable libvirtd smartd NetworkManager
+Removed symlink /etc/systemd/system/multi-user.target.wants/NetworkManager.service.
+Removed symlink /etc/systemd/system/multi-user.target.wants/libvirtd.service.
+Removed symlink /etc/systemd/system/multi-user.target.wants/smartd.service.
+Removed symlink /etc/systemd/system/dbus-org.freedesktop.NetworkManager.service.
+Removed symlink /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service.
+Removed symlink /etc/systemd/system/sockets.target.wants/virtlogd.socket.
+Removed symlink /etc/systemd/system/sockets.target.wants/virtlockd.socket.
+[root@labans ~]# systemctl status libvirtd smartd NetworkManager
+● libvirtd.service - Virtualization daemon
+   Loaded: loaded (/usr/lib/systemd/system/libvirtd.service; disabled; vendor preset: enabled)
+   Active: inactive (dead) since mar 2018-12-11 20:10:31 -03; 44s ago
+     Docs: man:libvirtd(8)
+           https://libvirt.org
+ Main PID: 1294 (code=exited, status=0/SUCCESS)
+   CGroup: /system.slice/libvirtd.service
+           ├─1713 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_leaseshelper
+           └─1714 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/libexec/libvirt_leaseshelper
+
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: DHCP, sockets bound exclusively to interface virbr0
+oct 10 11:18:25 labans dnsmasq[1713]: reading /etc/resolv.conf
+oct 10 11:18:25 labans dnsmasq[1713]: using nameserver 8.8.8.8#53
+oct 10 11:18:25 labans dnsmasq[1713]: read /etc/hosts - 2 addresses
+oct 10 11:18:25 labans dnsmasq[1713]: read /var/lib/libvirt/dnsmasq/default.addnhosts - 0 addresses
+oct 10 11:18:25 labans dnsmasq-dhcp[1713]: read /var/lib/libvirt/dnsmasq/default.hostsfile
+dic 11 20:10:31 labans systemd[1]: Stopping Virtualization daemon...
+dic 11 20:10:31 labans systemd[1]: Stopped Virtualization daemon.
+dic 11 20:10:31 labans dnsmasq[1713]: reading /etc/resolv.conf
+dic 11 20:10:31 labans dnsmasq[1713]: using nameserver 8.8.8.8#53
+
+● smartd.service - Self Monitoring and Reporting Technology (SMART) Daemon
+   Loaded: loaded (/usr/lib/systemd/system/smartd.service; disabled; vendor preset: enabled)
+   Active: inactive (dead)
+     Docs: man:smartd(8)
+           man:smartd.conf(5)
+
+oct 10 11:18:20 labans smartd[860]: Copyright (C) 2002-16, Bruce Allen, Christian Franke, www.smartmontools.org
+oct 10 11:18:20 labans smartd[860]: Opened configuration file /etc/smartmontools/smartd.conf
+oct 10 11:18:20 labans smartd[860]: Configuration file /etc/smartmontools/smartd.conf was parsed, found DEVICESCAN, scanning devices
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, opened
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, [VMware   Virtual disk     1.0 ], 536 GB
+oct 10 11:18:20 labans smartd[860]: Device: /dev/sda, IE (SMART) not enabled, skip device
+oct 10 11:18:20 labans smartd[860]: Try 'smartctl -s on /dev/sda' to turn on SMART features
+oct 10 11:18:20 labans smartd[860]: Monitoring 0 ATA/SATA, 0 SCSI/SAS and 0 NVMe devices
+dic 11 20:10:31 labans systemd[1]: Stopping Self Monitoring and Reporting Technology (SMART) Daemon...
+dic 11 20:10:31 labans systemd[1]: Stopped Self Monitoring and Reporting Technology (SMART) Daemon.
+
+● NetworkManager.service - Network Manager
+   Loaded: loaded (/usr/lib/systemd/system/NetworkManager.service; disabled; vendor preset: enabled)
+   Active: inactive (dead) since mar 2018-12-11 20:10:31 -03; 44s ago
+     Docs: man:NetworkManager(8)
+ Main PID: 906 (code=exited, status=0/SUCCESS)
+
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0062] device (virbr0-nic): Activation: successful, device activated.
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0389] device (virbr0-nic): state change: activated -> unmanaged (reason 'connection-assumed', sys-iface-state: 'external')
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0392] device (virbr0): bridge port virbr0-nic was detached
+oct 10 11:18:25 labans NetworkManager[906]: <info>  [1539181105.0392] device (virbr0-nic): released from master device virbr0
+nov 27 01:35:10 labans NetworkManager[906]: <info>  [1543293310.3492] device (ens192): carrier: link connected
+dic 11 20:10:31 labans systemd[1]: Stopping Network Manager...
+dic 11 20:10:31 labans NetworkManager[906]: <info>  [1544569831.1395] caught SIGTERM, shutting down normally.
+dic 11 20:10:31 labans NetworkManager[906]: <info>  [1544569831.1435] device (virbr0-nic): released from master device virbr0
+dic 11 20:10:31 labans NetworkManager[906]: <info>  [1544569831.1475] exiting (success)
+dic 11 20:10:31 labans systemd[1]: Stopped Network Manager.
+[root@labans ~]#
+
+
+
+
+--------------------------------------------------------------------------------
+levantar con los servicios libvirtd, smartd y NetworkManager
+--------------------------------------------------------------------------------
+
+[root@labans ~]# systemctl enable libvirtd smartd NetworkManager
+Created symlink from /etc/systemd/system/multi-user.target.wants/libvirtd.service to /usr/lib/systemd/system/libvirtd.service.
+Created symlink from /etc/systemd/system/sockets.target.wants/virtlockd.socket to /usr/lib/systemd/system/virtlockd.socket.
+Created symlink from /etc/systemd/system/sockets.target.wants/virtlogd.socket to /usr/lib/systemd/system/virtlogd.socket.
+Created symlink from /etc/systemd/system/multi-user.target.wants/smartd.service to /usr/lib/systemd/system/smartd.service.
+Created symlink from /etc/systemd/system/dbus-org.freedesktop.NetworkManager.service to /usr/lib/systemd/system/NetworkManager.service.
+Created symlink from /etc/systemd/system/multi-user.target.wants/NetworkManager.service to /usr/lib/systemd/system/NetworkManager.service.
+Created symlink from /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service to /usr/lib/systemd/system/NetworkManager-dispatcher.service.
+[root@labans ~]# systemctl start libvirtd smartd NetworkManager
+
+[root@labans ~]# systemctl status libvirtd smartd NetworkManager | grep -e Active -e Loaded -e service
+● libvirtd.service - Virtualization daemon
+   Loaded: loaded (/usr/lib/systemd/system/libvirtd.service; enabled; vendor preset: enabled)
+   Active: active (running) since mar 2018-12-11 20:11:54 -03; 2min 9s ago
+   CGroup: /system.slice/libvirtd.service
+● smartd.service - Self Monitoring and Reporting Technology (SMART) Daemon
+   Loaded: loaded (/usr/lib/systemd/system/smartd.service; enabled; vendor preset: enabled)
+   Active: active (running) since mar 2018-12-11 20:11:54 -03; 2min 9s ago
+   CGroup: /system.slice/smartd.service
+● NetworkManager.service - Network Manager
+   Loaded: loaded (/usr/lib/systemd/system/NetworkManager.service; enabled; vendor preset: enabled)
+   Active: active (running) since mar 2018-12-11 20:11:54 -03; 2min 9s ago
+   CGroup: /system.slice/NetworkManager.service
+[root@labans ~]#

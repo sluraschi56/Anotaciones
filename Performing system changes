@@ -1,0 +1,58 @@
+#Realizando cambios en el sistema
+
+1.- Capturar previamente a los cambios del sistema
+
+2.- Realizar el cambio en el sistema
+
+3.- Verificar si el cambio es efectivo.
+
+4.- Reversar el cambio si es necesario.
+
+5.- Terminar el proceso de cambio.
+
+-----------------------------------------------------------------------
+1
+-----------------------------------------------------------------------
+
+[root@labans ~]# ping 10.92.105.90 -c 3
+PING 10.92.105.90 (10.92.105.90) 56(84) bytes of data.
+64 bytes from 10.92.105.90: icmp_seq=1 ttl=64 time=0.061 ms
+64 bytes from 10.92.105.90: icmp_seq=2 ttl=64 time=0.073 ms
+64 bytes from 10.92.105.90: icmp_seq=3 ttl=64 time=0.070 ms
+
+--- 10.92.105.90 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.061/0.068/0.073/0.005 ms
+[root@labans ~]#
+
+-----------------------------------------------------------------------
+2
+-----------------------------------------------------------------------
+
+[root@labans ~]# echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+
+
+-----------------------------------------------------------------------
+3
+-----------------------------------------------------------------------
+
+[root@labans ~]# ping 10.92.105.90 -c 3
+PING 10.92.105.90 (10.92.105.90) 56(84) bytes of data.
+
+--- 10.92.105.90 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 1999ms
+
+-----------------------------------------------------------------------
+4
+-----------------------------------------------------------------------
+
+[root@labans ~]# echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+[root@labans ~]# ping 10.92.105.90 -c 3
+PING 10.92.105.90 (10.92.105.90) 56(84) bytes of data.
+64 bytes from 10.92.105.90: icmp_seq=1 ttl=64 time=0.059 ms
+64 bytes from 10.92.105.90: icmp_seq=2 ttl=64 time=0.073 ms
+64 bytes from 10.92.105.90: icmp_seq=3 ttl=64 time=0.077 ms
+
+--- 10.92.105.90 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.059/0.069/0.077/0.012 ms
