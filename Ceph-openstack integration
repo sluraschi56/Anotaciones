@@ -1,0 +1,30 @@
+ceph --cluster ceph-maqueta osd pool rm cinder-backup cinder-backup --yes-i-really-really-mean-it
+ceph --cluster ceph-maqueta osd pool rm cinder-volumes  cinder-volumes --yes-i-really-really-mean-it
+ceph --cluster ceph-maqueta osd pool rm ephemeral-vms ephemeral-vms --yes-i-really-really-mean-it
+ceph --cluster ceph-maqueta osd pool rm glance-images glance-images --yes-i-really-really-mean-it
+ceph --cluster ceph-maqueta osd pool rm  gnocchi-metrics gnocchi-metrics --yes-i-really-really-mean-it
+
+
+ceph --cluster ceph-maqueta osd pool create backups 512
+ceph --cluster ceph-maqueta osd pool set backups size 2
+while [ $(ceph --cluster ceph-maqueta -s | grep creating -c) -gt 0 ]; do echo -n .;sleep 1; done
+ceph --cluster ceph-maqueta osd pool create volumes 1024
+ceph --cluster ceph-maqueta osd pool set volumes size 2
+while [ $(ceph --cluster ceph-maqueta -s | grep creating -c) -gt 0 ]; do echo -n .;sleep 1; done
+ceph --cluster ceph-maqueta osd pool create vms 512
+ceph --cluster ceph-maqueta osd pool set vms size 2
+while [ $(ceph --cluster ceph-maqueta -s | grep creating -c) -gt 0 ]; do echo -n .;sleep 1; done
+ceph --cluster ceph-maqueta osd pool create images 128
+ceph --cluster ceph-maqueta osd pool set images size 2
+while [ $(ceph --cluster ceph-maqueta -s | grep creating -c) -gt 0 ]; do echo -n .;sleep 1; done
+ceph --cluster ceph-maqueta osd pool create metrics 1024
+ceph --cluster ceph-maqueta osd pool set metrics size 2
+
+
+
+ceph --cluster ceph-maqueta  auth add client.openstack mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=volumes, allow rwx pool=vms, allow rwx pool=images, allow rwx pool=backups, allow rwx pool=metrics' -o /etc/ceph/ceph.client.openstack.keyring
+
+
+fsid = 737d5f48-e11d-410a-b0da-1ee9d87db4f3
+
+key: AQD9+nZciawVOhAAbxZg2rUHl+splEY7j7Atdg==
