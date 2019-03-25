@@ -1,0 +1,38 @@
+- name: meter_snmp
+        interval: 600
+        resources:
+            - compute1-lab.external
+            - compute2-lab.external
+            - compute3-lab.external
+        meters:
+            - "hardware.cpu*"
+            - "hardware.memory.used"
+            - "hardware.disk.size.used"
+        sinks:
+            - meter_sink
+            - name: meter_snmp_rate
+        interval: 600
+        resources:
+            - compute1-lab.external
+            - compute2-lab.external
+            - compute3-lab.external
+        meters:
+            - "hardware.network*"
+            - "hardware.system_stats*"
+        sinks:
+            - snmp_sink
+- name: snmp_sink
+        transformers:
+            - name: "rate_of_change"
+              parameters:
+              source:
+              map_from:
+              name: "hardware\\.(system_stats.io|network)\\.(incoming|outgoing)\\.(blocks|bytes)"
+              unit: "(blocks|B)"
+              target:
+              map_to:
+              name: "hardware.\\1.\\2.\\3.rate"
+              unit: "\\1/s"
+              type: "gauge"
+        publishers:
+      - notifier://
