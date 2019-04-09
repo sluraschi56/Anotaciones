@@ -19,3 +19,20 @@ cd /etc/ceilometer/
 mv pipeline.yaml pipeline.yaml.cwom
 mv pipeline.yaml.bkp pipeline.yaml
 systemctl restart openstack-ceilometer*
+
+Poner modificaciones cwom
+
+cd /etc/snmp/
+mv snmpd.conf snmpd.conf.bkp
+mv snmpd.conf.cwom snmpd.conf
+systemctl restart snmpd
+
+
+cd /etc/ceilometer/
+mv pipeline.yaml pipeline.yaml.bkp
+mv pipeline.yaml.cwom pipeline.yaml
+systemctl restart openstack-ceilometer*
+
+
+syslocation PaseoColon505
+syscontact SebastianLuraschi sebastian.luraschi@claro.com.ar
